@@ -9,9 +9,7 @@ import org.modelmapper.ModelMapper;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class CupomDescontoDTO {
     private Long id;
 

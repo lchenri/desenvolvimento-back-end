@@ -1,17 +1,13 @@
 package br.com.multicinema.cinemaapi.model.entity;
 
-import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import javax.persistence.Entity;
+
 
 import java.sql.Date;
 import java.util.List;
 
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class Cliente extends Usuario{
 
     private String cpf;
@@ -19,4 +15,35 @@ public class Cliente extends Usuario{
     private boolean pgtoSalvo;
     private Date dataNascimento;
 
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getCelular() {
+        return celular;
+    }
+
+    public void setCelular(String celular) {
+        this.celular = celular;
+    }
+
+    public boolean isPgtoSalvo() {
+        return pgtoSalvo;
+    }
+
+    public void setPgtoSalvo(boolean pgtoSalvo) {
+        this.pgtoSalvo = pgtoSalvo;
+    }
+
+    public Date getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public void setDataNascimento(Date dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
 }

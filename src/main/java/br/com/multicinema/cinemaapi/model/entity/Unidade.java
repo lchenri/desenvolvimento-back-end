@@ -1,6 +1,6 @@
 package br.com.multicinema.cinemaapi.model.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +21,29 @@ public class Unidade {
     @OneToOne
     private Endereco endereco;
 
+    public Long getId() {
+        return id;
+    }
 
-//    private List<Funcionario> funcionarios;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUnidade() {
+        return unidade;
+    }
+
+    public void setUnidade(String unidade) {
+        this.unidade = unidade;
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
+
+    //    private List<Funcionario> funcionarios;
 }

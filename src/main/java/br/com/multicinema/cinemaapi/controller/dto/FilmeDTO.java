@@ -10,9 +10,7 @@ import org.modelmapper.ModelMapper;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class FilmeDTO {
     private Long id;
 
@@ -32,5 +30,9 @@ public class FilmeDTO {
         FilmeDTO filmeDTO = mapper.map(filme, FilmeDTO.class);
         filmeDTO.setIdGeneros(filme.getGeneros());
         return filmeDTO;
+    }
+
+    public void setIdGeneros(List<Genero> idGeneros) {
+        this.idGeneros = idGeneros;
     }
 }

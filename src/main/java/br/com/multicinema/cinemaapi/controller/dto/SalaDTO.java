@@ -9,9 +9,7 @@ import org.modelmapper.ModelMapper;
 
 import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class SalaDTO {
 
     private Long id;

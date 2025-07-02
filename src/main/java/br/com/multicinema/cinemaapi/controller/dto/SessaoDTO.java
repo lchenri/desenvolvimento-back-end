@@ -8,9 +8,7 @@ import org.modelmapper.ModelMapper;
 
 import java.time.LocalDateTime;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class SessaoDTO {
     private Long id;
     private LocalDateTime data;

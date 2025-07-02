@@ -8,9 +8,7 @@ import org.modelmapper.ModelMapper;
 
 import java.math.BigDecimal;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class ItemBomboniereDTO {
     private Long id;
     private String nome;

@@ -6,9 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class TipoSessaoDTO {
     private Long id;
     private String tipo;

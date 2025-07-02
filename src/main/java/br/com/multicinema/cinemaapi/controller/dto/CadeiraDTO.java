@@ -6,9 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class CadeiraDTO {
 
     private Long id;

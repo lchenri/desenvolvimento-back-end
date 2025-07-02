@@ -9,9 +9,7 @@ import org.modelmapper.ModelMapper;
 
 import java.math.BigDecimal;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class IngressoDTO {
     private Long id;
     private TipoMeiaEntrada tipoMeiaEntrada;

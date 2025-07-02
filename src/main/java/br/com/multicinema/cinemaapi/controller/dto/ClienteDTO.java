@@ -10,9 +10,6 @@ import org.modelmapper.ModelMapper;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class ClienteDTO {
 
     private Long id;

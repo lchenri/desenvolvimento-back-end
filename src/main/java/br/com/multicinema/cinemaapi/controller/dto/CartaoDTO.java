@@ -8,9 +8,6 @@ import org.modelmapper.ModelMapper;
 
 import java.util.Date;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class CartaoDTO {
     private Long id;
     private String numero;
