@@ -1,9 +1,12 @@
 package br.com.multicinema.cinemaapi.model.entity;
 
 import javax.persistence.*;
+
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 @Entity
 
@@ -13,8 +16,9 @@ public class Cadeira {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     private int numero;
-    private boolean isDisponivel;
+    private boolean isDisponivel = true;
     private boolean isEspecial;
 
     @ManyToOne

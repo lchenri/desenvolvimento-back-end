@@ -16,6 +16,30 @@ public class SalaDTO {
     private Integer capacidade;
     private List<TipoSessao> tiposSessaoSuportados;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Integer getCapacidade() {
+        return capacidade;
+    }
+
+    public void setCapacidade(Integer capacidade) {
+        this.capacidade = capacidade;
+    }
+
+    public List<TipoSessao> getTiposSessaoSuportados() {
+        return tiposSessaoSuportados;
+    }
+
+    public void setTiposSessaoSuportados(List<TipoSessao> tiposSessaoSuportados) {
+        this.tiposSessaoSuportados = tiposSessaoSuportados;
+    }
+
     public static SalaDTO create(Sala sala){
         ModelMapper modelMapper = new ModelMapper();
         SalaDTO salaDTO = modelMapper.map(sala, SalaDTO.class);

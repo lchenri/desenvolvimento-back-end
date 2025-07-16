@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class IngressoService {
@@ -19,8 +20,8 @@ public class IngressoService {
         return ingressoRepository.findAll();
     }
 
-    public Ingresso getIngressoById(Long id) {
-        return ingressoRepository.findById(id).orElse(null);
+    public Optional<Ingresso> getIngressoById(Long id) {
+        return ingressoRepository.findById(id);
     }
 
     @Transactional

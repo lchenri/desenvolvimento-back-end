@@ -14,6 +14,38 @@ public class ImagemDTO {
     private Long idFilme;
     private String tituloFilme;
 
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public String getNameUrl() {
+        return nameUrl;
+    }
+
+    public void setNameUrl(String nameUrl) {
+        this.nameUrl = nameUrl;
+    }
+
+    public Long getIdFilme() {
+        return idFilme;
+    }
+
+    public void setIdFilme(Long idFilme) {
+        this.idFilme = idFilme;
+    }
+
+    public String getTituloFilme() {
+        return tituloFilme;
+    }
+
+    public void setTituloFilme(String tituloFilme) {
+        this.tituloFilme = tituloFilme;
+    }
+
     public static ImagemDTO create(Imagem imagem){
         ModelMapper mapper = new ModelMapper();
         ImagemDTO imagemDTO = mapper.map(imagem, ImagemDTO.class);

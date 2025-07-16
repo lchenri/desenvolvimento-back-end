@@ -1,0 +1,37 @@
+package br.com.multicinema.cinemaapi.controller;
+
+import br.com.multicinema.cinemaapi.controller.dto.IntervaloExibicaoDTO;
+import br.com.multicinema.cinemaapi.service.IntervaloExibicaoService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.stream.Collectors;
+
+@RestController
+@RequestMapping("/api/v1/intervalos-exibicao")
+public class IntervaloExibicaoController {
+
+    private final IntervaloExibicaoService intervaloExibicaoService;
+
+    public IntervaloExibicaoController(IntervaloExibicaoService intervaloExibicaoService) {
+        this.intervaloExibicaoService = intervaloExibicaoService;
+    }
+
+    @GetMapping()
+    public ResponseEntity get() {
+        var intervalos = intervaloExibicaoService.getIntervalosExibicao();
+        return ResponseEntity.ok(intervalos.stream().map(IntervaloExibicaoDTO::create).collect(Collectors.toList()));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity getById(@PathVariable Long id) {
+        var intervalo = intervaloExibicaoService.getIntervaloExibicaoById(id);
+        if (intervalo.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(intervalo.map(IntervaloExibicaoDTO::create));
+    }
+}

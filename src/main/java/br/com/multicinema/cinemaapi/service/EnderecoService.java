@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
+
 
 @Service
 public class EnderecoService {
@@ -19,8 +21,8 @@ public class EnderecoService {
         return enderecoRepository.findAll();
     }
 
-    public Endereco getEnderecoById(Long id) {
-        return enderecoRepository.findById(id).orElse(null);
+    public Optional<Endereco> getEnderecoById(Long id) {
+        return enderecoRepository.findById(id);
     }
 
     @Transactional
