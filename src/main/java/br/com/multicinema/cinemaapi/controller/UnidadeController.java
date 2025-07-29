@@ -1,12 +1,12 @@
 package br.com.multicinema.cinemaapi.controller;
 
 import br.com.multicinema.cinemaapi.controller.dto.UnidadeDTO;
+import br.com.multicinema.cinemaapi.model.entity.Unidade;
 import br.com.multicinema.cinemaapi.service.UnidadeService;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
 
@@ -33,5 +33,22 @@ public class UnidadeController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(unidade.map(UnidadeDTO::create));
+    }
+
+    @PostMapping()
+    public ResponseEntity post(@RequestBody UnidadeDTO unidadeDTO){
+        try{
+            Unidade unidade = converter(unidadeDTO);
+            unidade = unidadeService.salvar(unidade);
+            return new ResponseEntity(unidade, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao salvar a unidade: " + e.getMessage());
+        }
+    }
+
+    private Unidade converter(UnidadeDTO dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        Unidade unidade = modelMapper.map(dto, Unidade.class);
+        return unidade;
     }
 }

@@ -1,12 +1,12 @@
 package br.com.multicinema.cinemaapi.controller;
 
 import br.com.multicinema.cinemaapi.controller.dto.SalaDTO;
+import br.com.multicinema.cinemaapi.model.entity.Sala;
 import br.com.multicinema.cinemaapi.service.SalaService;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/salas")
@@ -31,5 +31,22 @@ public class SalaController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(sala.map(SalaDTO::create));
+    }
+
+    @PostMapping()
+    public ResponseEntity post(@RequestBody SalaDTO salaDTO){
+        try{
+            Sala sala = converter(salaDTO);
+            sala = salaService.salvar(sala);
+            return new ResponseEntity(sala, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao salvar a sala: " + e.getMessage());
+        }
+    }
+
+    private Sala converter(SalaDTO dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        Sala sala = modelMapper.map(dto, Sala.class);
+        return sala;
     }
 }

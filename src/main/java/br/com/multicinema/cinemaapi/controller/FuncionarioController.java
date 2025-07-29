@@ -3,11 +3,10 @@ package br.com.multicinema.cinemaapi.controller;
 import br.com.multicinema.cinemaapi.controller.dto.FuncionarioDTO;
 import br.com.multicinema.cinemaapi.model.entity.Funcionario;
 import br.com.multicinema.cinemaapi.service.FuncionarioService;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,5 +34,22 @@ public class FuncionarioController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(funcionario.map(FuncionarioDTO::create));
+    }
+
+    @PostMapping()
+    public ResponseEntity post(@RequestBody FuncionarioDTO funcionarioDTO){
+        try{
+            Funcionario funcionario = converter(funcionarioDTO);
+            funcionario = funcionarioService.salvar(funcionario);
+            return new ResponseEntity(funcionario, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao salvar o funcionário: " + e.getMessage());
+        }
+    }
+
+    private Funcionario converter(FuncionarioDTO dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        Funcionario funcionario = modelMapper.map(dto, Funcionario.class);
+        return funcionario;
     }
 }

@@ -3,11 +3,11 @@ package br.com.multicinema.cinemaapi.controller;
 import br.com.multicinema.cinemaapi.controller.dto.CadeiraDTO;
 import br.com.multicinema.cinemaapi.model.entity.Cadeira;
 import br.com.multicinema.cinemaapi.service.CadeiraService;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,4 +38,20 @@ public class CadeiraController {
         return ResponseEntity.ok(cadeira.map(CadeiraDTO::create));
     }
 
+    @PostMapping()
+    public ResponseEntity post(@RequestBody CadeiraDTO cadeiraDTO) {
+        try {
+            Cadeira cadeira = converter(cadeiraDTO);
+            cadeira = cadeiraService.salvar(cadeira);
+            return new ResponseEntity(cadeira, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao salvar a cadeira: " + e.getMessage());
+        }
+    }
+
+    private Cadeira converter(CadeiraDTO dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        Cadeira cadeira = modelMapper.map(dto, Cadeira.class);
+        return cadeira;
+    }
 }

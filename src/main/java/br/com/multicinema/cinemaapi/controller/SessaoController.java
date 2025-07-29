@@ -1,12 +1,12 @@
 package br.com.multicinema.cinemaapi.controller;
 
 import br.com.multicinema.cinemaapi.controller.dto.SessaoDTO;
+import br.com.multicinema.cinemaapi.model.entity.Sessao;
 import br.com.multicinema.cinemaapi.service.SessaoService;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
 
@@ -33,5 +33,22 @@ public class SessaoController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(sessao.map(SessaoDTO::create));
+    }
+
+    @PostMapping()
+    public ResponseEntity post(@RequestBody SessaoDTO sessaoDTO){
+        try{
+            Sessao sessao = converter(sessaoDTO);
+            sessao = sessaoService.salvar(sessao);
+            return new ResponseEntity(sessao, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao salvar a sessão: " + e.getMessage());
+        }
+    }
+
+    private Sessao converter(SessaoDTO dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        Sessao sessao = modelMapper.map(dto, Sessao.class);
+        return sessao;
     }
 }

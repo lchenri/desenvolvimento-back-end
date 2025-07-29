@@ -3,11 +3,10 @@ package br.com.multicinema.cinemaapi.controller;
 import br.com.multicinema.cinemaapi.controller.dto.EnderecoDTO;
 import br.com.multicinema.cinemaapi.model.entity.Endereco;
 import br.com.multicinema.cinemaapi.service.EnderecoService;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +35,23 @@ public class EnderecoController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(endereco.map(EnderecoDTO::create));
+    }
+
+    @PostMapping()
+    public ResponseEntity post(@RequestBody EnderecoDTO enderecoDTO){
+        try{
+            Endereco endereco = converter(enderecoDTO);
+            endereco = enderecoService.save(endereco);
+            return new ResponseEntity(endereco, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao salvar o endereço: " + e.getMessage());
+        }
+    }
+
+    private Endereco converter(EnderecoDTO dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        Endereco endereco = modelMapper.map(dto, Endereco.class);
+        return endereco;
     }
 
 }

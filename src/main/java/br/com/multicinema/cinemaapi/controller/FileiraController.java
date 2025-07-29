@@ -3,11 +3,10 @@ package br.com.multicinema.cinemaapi.controller;
 import br.com.multicinema.cinemaapi.controller.dto.FileiraDTO;
 import br.com.multicinema.cinemaapi.model.entity.Fileira;
 import br.com.multicinema.cinemaapi.service.FileiraService;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,5 +34,22 @@ public class FileiraController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(fileira.map(FileiraDTO::create));
+    }
+
+    @PostMapping()
+    public ResponseEntity post(@RequestBody FileiraDTO fileiraDTO){
+        try{
+            Fileira fileira = converter(fileiraDTO);
+            fileira = fileiraService.salvar(fileira);
+            return new ResponseEntity(fileira, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao salvar a fileira: " + e.getMessage());
+        }
+    }
+
+    private Fileira converter(FileiraDTO dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        Fileira fileira = modelMapper.map(dto, Fileira.class);
+        return fileira;
     }
 }

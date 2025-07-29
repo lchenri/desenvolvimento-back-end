@@ -3,11 +3,10 @@ package br.com.multicinema.cinemaapi.controller;
 import br.com.multicinema.cinemaapi.controller.dto.CartaoDTO;
 import br.com.multicinema.cinemaapi.model.entity.Cartao;
 import br.com.multicinema.cinemaapi.service.CartaoService;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,4 +36,20 @@ public class CartaoController {
         return ResponseEntity.ok(cartao.map(CartaoDTO::create));
     }
 
+    @PostMapping()
+    public ResponseEntity post(@RequestBody CartaoDTO cartaoDTO){
+        try{
+            Cartao cartao = converter(cartaoDTO);
+            cartao = cartaoService.salvar(cartao);
+            return new ResponseEntity(cartao, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao salvar o cartão: " + e.getMessage());
+        }
+    }
+
+    private Cartao converter(CartaoDTO dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        Cartao cartao = modelMapper.map(dto, Cartao.class);
+        return cartao;
+    }
 }

@@ -1,12 +1,12 @@
 package br.com.multicinema.cinemaapi.controller;
 
 import br.com.multicinema.cinemaapi.controller.dto.ImagemDTO;
+import br.com.multicinema.cinemaapi.model.entity.Imagem;
 import br.com.multicinema.cinemaapi.service.ImagemService;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
 
@@ -33,5 +33,22 @@ public class ImagemController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(imagem.map(ImagemDTO::create));
+    }
+
+    @PostMapping()
+    public ResponseEntity post(@RequestBody ImagemDTO imagemDTO){
+        try{
+            Imagem imagem = converter(imagemDTO);
+            imagem = imagemService.salvar(imagem);
+            return new ResponseEntity(imagem, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao salvar a imagem: " + e.getMessage());
+        }
+    }
+
+    private Imagem converter(ImagemDTO dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        Imagem imagem = modelMapper.map(dto, Imagem.class);
+        return imagem;
     }
 }

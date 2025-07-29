@@ -1,12 +1,12 @@
 package br.com.multicinema.cinemaapi.controller;
 
 import br.com.multicinema.cinemaapi.controller.dto.IngressoDTO;
+import br.com.multicinema.cinemaapi.model.entity.Ingresso;
 import br.com.multicinema.cinemaapi.service.IngressoService;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
 
@@ -33,5 +33,22 @@ public class IngressoController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(ingresso.map(IngressoDTO::create));
+    }
+
+    @PostMapping()
+    public ResponseEntity post(@RequestBody IngressoDTO ingressoDTO){
+        try{
+            Ingresso ingresso = converter(ingressoDTO);
+            ingresso = ingressoService.salvar(ingresso);
+            return new ResponseEntity(ingresso, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao salvar o ingresso: " + e.getMessage());
+        }
+    }
+
+    private Ingresso converter(IngressoDTO dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        Ingresso ingresso = modelMapper.map(dto, Ingresso.class);
+        return ingresso;
     }
 }

@@ -1,12 +1,12 @@
 package br.com.multicinema.cinemaapi.controller;
 
 import br.com.multicinema.cinemaapi.controller.dto.FilmeDTO;
+import br.com.multicinema.cinemaapi.model.entity.Filme;
 import br.com.multicinema.cinemaapi.service.FilmeService;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
 
@@ -33,5 +33,22 @@ public class FilmeController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(filme.map(FilmeDTO::create));
+    }
+
+    @PostMapping()
+    public ResponseEntity post(@RequestBody FilmeDTO filmeDTO){
+        try{
+            Filme filme = converter(filmeDTO);
+            filme = filmeService.salvar(filme);
+            return new ResponseEntity(filme, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao salvar o filme: " + e.getMessage());
+        }
+    }
+
+    private Filme converter(FilmeDTO dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        Filme filme = modelMapper.map(dto, Filme.class);
+        return filme;
     }
 }
