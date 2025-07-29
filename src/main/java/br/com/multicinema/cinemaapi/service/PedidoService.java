@@ -28,4 +28,9 @@ public class PedidoService {
     public Pedido salvar(Pedido pedido) {
         return pedidoRepository.save(pedido);
     }
+
+    @Transactional
+    public void excluir(Pedido pedido) {
+        pedidoRepository.delete(pedido);
+    }
 }

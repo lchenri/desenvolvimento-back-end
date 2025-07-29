@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -43,6 +44,35 @@ public class ImagemController {
             return new ResponseEntity(imagem, HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erro ao salvar a imagem: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity put(@PathVariable("id") Long id, @RequestBody ImagemDTO imagemDTO) {
+        if (!imagemService.getImagemById(id).isPresent()) {
+            return new ResponseEntity("Imagem não encontrada", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Imagem imagem = converter(imagemDTO);
+            imagem.setId(id);
+            imagemService.salvar(imagem);
+            return ResponseEntity.ok(imagem);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao atualizar a imagem: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        Optional<Imagem> imagem = imagemService.getImagemById(id);
+        if (!imagem.isPresent()) {
+            return new ResponseEntity("Imagem não encontrada", HttpStatus.NOT_FOUND);
+        }
+        try {
+            imagemService.excluir(imagem.get());
+            return new ResponseEntity("Imagem excluída com sucesso", HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao excluir a imagem: " + e.getMessage());
         }
     }
 

@@ -28,4 +28,9 @@ public class ItemBomboniereService {
     public ItemBomboniere salvar(ItemBomboniere itemBomboniere) {
         return itemBomboniereRepository.save(itemBomboniere);
     }
+
+    @Transactional
+    public void excluir(ItemBomboniere itemBomboniere) {
+        itemBomboniereRepository.delete(itemBomboniere);
+    }
 }

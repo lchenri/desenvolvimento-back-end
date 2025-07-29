@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -44,6 +45,35 @@ public class FuncionarioController {
             return new ResponseEntity(funcionario, HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erro ao salvar o funcionário: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity put(@PathVariable("id") Long id, @RequestBody FuncionarioDTO funcionarioDTO) {
+        if (!funcionarioService.getFuncionarioById(id).isPresent()) {
+            return new ResponseEntity("Funcionário não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Funcionario funcionario = converter(funcionarioDTO);
+            funcionario.setId(id);
+            funcionarioService.salvar(funcionario);
+            return ResponseEntity.ok(funcionario);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao atualizar o funcionário: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        Optional<Funcionario> funcionario = funcionarioService.getFuncionarioById(id);
+        if (!funcionario.isPresent()) {
+            return new ResponseEntity("Funcionário não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            funcionarioService.excluir(funcionario.get());
+            return new ResponseEntity("Funcionário excluído com sucesso", HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao excluir o funcionário: " + e.getMessage());
         }
     }
 

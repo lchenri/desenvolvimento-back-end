@@ -28,4 +28,9 @@ public class TipoSessaoService {
     public TipoSessao salvar(TipoSessao tipoSessao) {
         return tipoSessaoRepository.save(tipoSessao);
     }
+
+    @Transactional
+    public void excluir(TipoSessao tipoSessao) {
+        tipoSessaoRepository.delete(tipoSessao);
+    }
 }

@@ -29,4 +29,8 @@ public class IntervaloExibicaoService {
         return intervaloExibicaoRepository.save(intervaloExibicao);
     }
 
+    @Transactional
+    public void excluir(IntervaloExibicao intervaloExibicao) {
+        intervaloExibicaoRepository.delete(intervaloExibicao);
+    }
 }

@@ -28,4 +28,9 @@ public class ClienteService {
     public Cliente salvar(Cliente cliente) {
         return clienteRepository.save(cliente);
     }
+
+    @Transactional
+    public void excluir(Cliente cliente) {
+        clienteRepository.delete(cliente);
+    }
 }

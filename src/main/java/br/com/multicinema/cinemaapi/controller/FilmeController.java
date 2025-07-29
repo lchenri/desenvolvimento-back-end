@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -43,6 +44,35 @@ public class FilmeController {
             return new ResponseEntity(filme, HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erro ao salvar o filme: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity put(@PathVariable("id") Long id, @RequestBody FilmeDTO filmeDTO) {
+        if (!filmeService.getFilmeById(id).isPresent()) {
+            return new ResponseEntity("Filme não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Filme filme = converter(filmeDTO);
+            filme.setId(id);
+            filmeService.salvar(filme);
+            return ResponseEntity.ok(filme);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao atualizar o filme: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        Optional<Filme> filme = filmeService.getFilmeById(id);
+        if (!filme.isPresent()) {
+            return new ResponseEntity("Filme não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            filmeService.excluir(filme.get());
+            return new ResponseEntity("Filme excluído com sucesso", HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao excluir o filme: " + e.getMessage());
         }
     }
 

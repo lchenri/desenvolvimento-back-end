@@ -48,6 +48,35 @@ public class EnderecoController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity put(@PathVariable("id") Long id, @RequestBody EnderecoDTO enderecoDTO){
+        if (!enderecoService.getEnderecoById(id).isPresent()){
+            return new ResponseEntity("Endereço não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Endereco endereco = converter(enderecoDTO);
+            endereco.setId(id);
+            enderecoService.save(endereco);
+            return ResponseEntity.ok(endereco);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao atualizar o endereço: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id){
+        Optional<Endereco> endereco = enderecoService.getEnderecoById(id);
+        if(!endereco.isPresent()){
+            return new ResponseEntity("Endereço não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try{
+            enderecoService.excluir(endereco.get());
+            return new ResponseEntity("Endereço excluído com sucesso", HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao excluir o endereço: " + e.getMessage());
+        }
+    }
+
     private Endereco converter(EnderecoDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         Endereco endereco = modelMapper.map(dto, Endereco.class);

@@ -29,4 +29,9 @@ public class FileiraService {
     public Fileira salvar(Fileira fileira) {
         return fileiraRepository.save(fileira);
     }
+
+    @Transactional
+    public void excluir(Fileira fileira) {
+        fileiraRepository.delete(fileira);
+    }
 }

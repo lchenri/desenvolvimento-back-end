@@ -29,4 +29,8 @@ public class CadeiraService {
         return cadeiraRepository.save(cadeira);
     }
 
+    @Transactional
+    public void excluir(Cadeira cadeira) {
+        cadeiraRepository.delete(cadeira);
+    }
 }

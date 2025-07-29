@@ -29,4 +29,8 @@ public class CartaoService {
         return cartaoRepository.save(cartao);
     }
 
+    @Transactional
+    public void excluir(Cartao cartao) {
+        cartaoRepository.delete(cartao);
+    }
 }

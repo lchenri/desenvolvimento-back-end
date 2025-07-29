@@ -28,4 +28,9 @@ public class GeneroService {
     public Genero salvar(Genero genero) {
         return generoRepository.save(genero);
     }
+
+    @Transactional
+    public void excluir(Genero genero) {
+        generoRepository.delete(genero);
+    }
 }

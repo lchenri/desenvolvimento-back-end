@@ -28,4 +28,9 @@ public class SalaService {
     public Sala salvar(Sala sala) {
         return salaRepository.save(sala);
     }
+
+    @Transactional
+    public void excluir(Sala sala) {
+        salaRepository.delete(sala);
+    }
 }

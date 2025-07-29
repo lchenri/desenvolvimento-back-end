@@ -28,4 +28,9 @@ public class UnidadeService {
     public Unidade salvar(Unidade unidade) {
         return unidadeRepository.save(unidade);
     }
+
+    @Transactional
+    public void excluir(Unidade unidade) {
+        unidadeRepository.delete(unidade);
+    }
 }

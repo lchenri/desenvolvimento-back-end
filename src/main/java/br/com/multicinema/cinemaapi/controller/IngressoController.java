@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -43,6 +44,35 @@ public class IngressoController {
             return new ResponseEntity(ingresso, HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erro ao salvar o ingresso: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity put(@PathVariable("id") Long id, @RequestBody IngressoDTO ingressoDTO) {
+        if (!ingressoService.getIngressoById(id).isPresent()) {
+            return new ResponseEntity("Ingresso não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Ingresso ingresso = converter(ingressoDTO);
+            ingresso.setId(id);
+            ingressoService.salvar(ingresso);
+            return ResponseEntity.ok(ingresso);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao atualizar o ingresso: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        Optional<Ingresso> ingresso = ingressoService.getIngressoById(id);
+        if (!ingresso.isPresent()) {
+            return new ResponseEntity("Ingresso não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            ingressoService.excluir(ingresso.get());
+            return new ResponseEntity("Ingresso excluído com sucesso", HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao excluir o ingresso: " + e.getMessage());
         }
     }
 

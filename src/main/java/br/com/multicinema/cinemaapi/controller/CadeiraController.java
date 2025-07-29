@@ -49,6 +49,35 @@ public class CadeiraController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity put(@PathVariable("id") Long id, @RequestBody CadeiraDTO cadeiraDTO) {
+        if (!cadeiraService.getCadeiraById(id).isPresent()) {
+            return new ResponseEntity("Cadeira não encontrada", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Cadeira cadeira = converter(cadeiraDTO);
+            cadeira.setId(id);
+            cadeiraService.salvar(cadeira);
+            return ResponseEntity.ok(cadeira);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao atualizar a cadeira: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        Optional<Cadeira> cadeira = cadeiraService.getCadeiraById(id);
+        if (!cadeira.isPresent()) {
+            return new ResponseEntity("Cadeira não encontrada", HttpStatus.NOT_FOUND);
+        }
+        try {
+            cadeiraService.excluir(cadeira.get());
+            return new ResponseEntity("Cadeira excluída com sucesso", HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao excluir a cadeira: " + e.getMessage());
+        }
+    }
+
     private Cadeira converter(CadeiraDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         Cadeira cadeira = modelMapper.map(dto, Cadeira.class);

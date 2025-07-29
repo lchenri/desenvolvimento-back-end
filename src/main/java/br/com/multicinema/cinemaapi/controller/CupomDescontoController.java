@@ -48,6 +48,35 @@ public class CupomDescontoController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity put(@PathVariable("id") Long id, @RequestBody CupomDescontoDTO cupomDescontoDTO) {
+        if (!cupomDescontoService.getCupomDescontoById(id).isPresent()) {
+            return new ResponseEntity("Cupom de desconto não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            CupomDesconto cupomDesconto = converter(cupomDescontoDTO);
+            cupomDesconto.setId(id);
+            cupomDescontoService.salvar(cupomDesconto);
+            return ResponseEntity.ok(cupomDesconto);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao atualizar o cupom de desconto: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        Optional<CupomDesconto> cupomDesconto = cupomDescontoService.getCupomDescontoById(id);
+        if (!cupomDesconto.isPresent()) {
+            return new ResponseEntity("Cupom de desconto não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            cupomDescontoService.excluir(cupomDesconto.get());
+            return new ResponseEntity("Cupom de desconto excluído com sucesso", HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao excluir o cupom de desconto: " + e.getMessage());
+        }
+    }
+
     private CupomDesconto converter(CupomDescontoDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         CupomDesconto cupomDesconto = modelMapper.map(dto, CupomDesconto.class);

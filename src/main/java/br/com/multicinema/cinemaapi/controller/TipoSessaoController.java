@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/v1/tipos-sessao")
 public class TipoSessaoController {
@@ -41,6 +43,35 @@ public class TipoSessaoController {
             return new ResponseEntity(tipoSessao, HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erro ao salvar o tipo de sessão: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity put(@PathVariable("id") Long id, @RequestBody TipoSessaoDTO tipoSessaoDTO) {
+        if (!tipoSessaoService.getTipoSessaoById(id).isPresent()) {
+            return new ResponseEntity("Tipo de sessão não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            TipoSessao tipoSessao = converter(tipoSessaoDTO);
+            tipoSessao.setId(id);
+            tipoSessaoService.salvar(tipoSessao);
+            return ResponseEntity.ok(tipoSessao);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao atualizar o tipo de sessão: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        Optional<TipoSessao> tipoSessao = tipoSessaoService.getTipoSessaoById(id);
+        if (!tipoSessao.isPresent()) {
+            return new ResponseEntity("Tipo de sessão não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            tipoSessaoService.excluir(tipoSessao.get());
+            return new ResponseEntity("Tipo de sessão excluído com sucesso", HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao excluir o tipo de sessão: " + e.getMessage());
         }
     }
 

@@ -47,6 +47,35 @@ public class CartaoController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity put(@PathVariable("id") Long id, @RequestBody CartaoDTO cartaoDTO) {
+        if (!cartaoService.getCartaoById(id).isPresent()) {
+            return new ResponseEntity("Cartão não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Cartao cartao = converter(cartaoDTO);
+            cartao.setId(id);
+            cartaoService.salvar(cartao);
+            return ResponseEntity.ok(cartao);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao atualizar o cartão: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        Optional<Cartao> cartao = cartaoService.getCartaoById(id);
+        if (!cartao.isPresent()) {
+            return new ResponseEntity("Cartão não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            cartaoService.excluir(cartao.get());
+            return new ResponseEntity("Cartão excluído com sucesso", HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao excluir o cartão: " + e.getMessage());
+        }
+    }
+
     private Cartao converter(CartaoDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         Cartao cartao = modelMapper.map(dto, Cartao.class);

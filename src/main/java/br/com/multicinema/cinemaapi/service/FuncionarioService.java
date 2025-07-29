@@ -28,4 +28,9 @@ public class FuncionarioService {
     public Funcionario salvar(Funcionario funcionario) {
         return funcionarioRepository.save(funcionario);
     }
+
+    @Transactional
+    public void excluir(Funcionario funcionario) {
+        funcionarioRepository.delete(funcionario);
+    }
 }

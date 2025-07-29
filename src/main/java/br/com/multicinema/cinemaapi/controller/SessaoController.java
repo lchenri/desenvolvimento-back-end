@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -43,6 +44,35 @@ public class SessaoController {
             return new ResponseEntity(sessao, HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erro ao salvar a sessão: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity put(@PathVariable("id") Long id, @RequestBody SessaoDTO sessaoDTO) {
+        if (!sessaoService.getSessaoById(id).isPresent()) {
+            return new ResponseEntity("Sessão não encontrada", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Sessao sessao = converter(sessaoDTO);
+            sessao.setId(id);
+            sessaoService.salvar(sessao);
+            return ResponseEntity.ok(sessao);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao atualizar a sessão: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        Optional<Sessao> sessao = sessaoService.getSessaoById(id);
+        if (!sessao.isPresent()) {
+            return new ResponseEntity("Sessão não encontrada", HttpStatus.NOT_FOUND);
+        }
+        try {
+            sessaoService.excluir(sessao.get());
+            return new ResponseEntity("Sessão excluída com sucesso", HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao excluir a sessão: " + e.getMessage());
         }
     }
 

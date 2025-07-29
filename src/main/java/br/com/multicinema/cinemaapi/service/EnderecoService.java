@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -28,5 +29,11 @@ public class EnderecoService {
     @Transactional
     public Endereco save(Endereco endereco) {
         return enderecoRepository.save(endereco);
+    }
+
+    @Transactional
+    public void excluir(Endereco endereco) {
+        Objects.requireNonNull(endereco.getId());
+        enderecoRepository.delete(endereco);
     }
 }

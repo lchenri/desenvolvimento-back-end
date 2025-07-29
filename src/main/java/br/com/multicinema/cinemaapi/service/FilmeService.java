@@ -28,4 +28,9 @@ public class FilmeService {
     public Filme salvar(Filme filme) {
         return filmeRepository.save(filme);
     }
+
+    @Transactional
+    public void excluir(Filme filme) {
+        filmeRepository.delete(filme);
+    }
 }

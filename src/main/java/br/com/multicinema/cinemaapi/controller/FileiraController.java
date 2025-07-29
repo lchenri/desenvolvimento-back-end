@@ -47,6 +47,35 @@ public class FileiraController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity put(@PathVariable("id") Long id, @RequestBody FileiraDTO fileiraDTO) {
+        if (!fileiraService.getFileiraById(id).isPresent()) {
+            return new ResponseEntity("Fileira não encontrada", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Fileira fileira = converter(fileiraDTO);
+            fileira.setId(id);
+            fileiraService.salvar(fileira);
+            return ResponseEntity.ok(fileira);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao atualizar a fileira: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        Optional<Fileira> fileira = fileiraService.getFileiraById(id);
+        if (!fileira.isPresent()) {
+            return new ResponseEntity("Fileira não encontrada", HttpStatus.NOT_FOUND);
+        }
+        try {
+            fileiraService.excluir(fileira.get());
+            return new ResponseEntity("Fileira excluída com sucesso", HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao excluir a fileira: " + e.getMessage());
+        }
+    }
+
     private Fileira converter(FileiraDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         Fileira fileira = modelMapper.map(dto, Fileira.class);

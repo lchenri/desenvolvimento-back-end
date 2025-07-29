@@ -29,4 +29,8 @@ public class CupomDescontoService {
         return cupomDescontoRepository.save(cupomDesconto);
     }
 
+    @Transactional
+    public void excluir(CupomDesconto cupomDesconto) {
+        cupomDescontoRepository.delete(cupomDesconto);
+    }
 }

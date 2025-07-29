@@ -28,4 +28,9 @@ public class IngressoService {
     public Ingresso salvar(Ingresso ingresso) {
         return ingressoRepository.save(ingresso);
     }
+
+    @Transactional
+    public void excluir(Ingresso ingresso) {
+        ingressoRepository.delete(ingresso);
+    }
 }

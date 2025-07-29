@@ -28,4 +28,9 @@ public class SessaoService {
     public Sessao salvar(Sessao sessao) {
         return sessaoRepository.save(sessao);
     }
+
+    @Transactional
+    public void excluir(Sessao sessao) {
+        sessaoRepository.delete(sessao);
+    }
 }

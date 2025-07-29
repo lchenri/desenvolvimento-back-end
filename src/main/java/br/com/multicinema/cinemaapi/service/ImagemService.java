@@ -28,4 +28,9 @@ public class ImagemService {
     public Imagem salvar(Imagem imagem){
         return imagemRepository.save(imagem);
     }
+
+    @Transactional
+    public void excluir(Imagem imagem) {
+        imagemRepository.delete(imagem);
+    }
 }

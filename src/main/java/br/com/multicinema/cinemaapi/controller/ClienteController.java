@@ -48,6 +48,35 @@ public class ClienteController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity put(@PathVariable("id") Long id, @RequestBody ClienteDTO clienteDTO) {
+        if (!clienteService.getClienteById(id).isPresent()) {
+            return new ResponseEntity("Cliente não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Cliente cliente = converter(clienteDTO);
+            cliente.setId(id);
+            clienteService.salvar(cliente);
+            return ResponseEntity.ok(cliente);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao atualizar o cliente: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        Optional<Cliente> cliente = clienteService.getClienteById(id);
+        if (!cliente.isPresent()) {
+            return new ResponseEntity("Cliente não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            clienteService.excluir(cliente.get());
+            return new ResponseEntity("Cliente excluído com sucesso", HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao excluir o cliente: " + e.getMessage());
+        }
+    }
+
     private Cliente converter(ClienteDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         Cliente cliente = modelMapper.map(dto, Cliente.class);
