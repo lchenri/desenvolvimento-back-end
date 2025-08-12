@@ -64,9 +64,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/v1/tipos-sessao/**").permitAll()
                 .antMatchers("/api/v1/intervalos-exibicao/**").permitAll()
                 .antMatchers("/api/v1/imagens/**").permitAll()
+                .antMatchers("/api/v1/clientes/**").permitAll()
+
 
                 // APIs que necessitam autenticação de usuário comum
-                .antMatchers("/api/v1/clientes/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/api/v1/pedidos/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/api/v1/ingressos/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/api/v1/cartoes/**").hasAnyRole("USER", "ADMIN")
