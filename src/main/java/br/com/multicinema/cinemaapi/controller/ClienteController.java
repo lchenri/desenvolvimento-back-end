@@ -1,12 +1,19 @@
 package br.com.multicinema.cinemaapi.controller;
 
 import br.com.multicinema.cinemaapi.controller.dto.ClienteDTO;
+import br.com.multicinema.cinemaapi.controller.dto.CredenciaisDTO;
+import br.com.multicinema.cinemaapi.controller.dto.TokenDTO;
 import br.com.multicinema.cinemaapi.model.entity.Cliente;
+import br.com.multicinema.cinemaapi.security.JwtService;
 import br.com.multicinema.cinemaapi.service.ClienteService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -20,9 +27,13 @@ import java.util.stream.Collectors;
 public class ClienteController {
 
     private final ClienteService clienteService;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public ClienteController(ClienteService clienteService) {
+    public ClienteController(ClienteService clienteService, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.clienteService = clienteService;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     @GetMapping()
@@ -44,10 +55,27 @@ public class ClienteController {
     public ResponseEntity post(@RequestBody ClienteDTO clienteDTO){
         try{
             Cliente cliente = converter(clienteDTO);
+            String senhaCriptografada = passwordEncoder.encode(clienteDTO.getSenha());
+            cliente.setSenha(senhaCriptografada);
             cliente = clienteService.salvar(cliente);
             return new ResponseEntity(cliente, HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erro ao salvar o cliente: " + e.getMessage());
+        }
+    }
+
+
+    @PostMapping("/auth")
+    public TokenDTO autenticar(@RequestBody CredenciaisDTO credenciais){
+        try{
+            Cliente cliente = new Cliente();
+            cliente.setEmail(credenciais.getEmail());
+            cliente.setSenha(credenciais.getSenha());
+            UserDetails usuarioAutenticado = clienteService.autenticar(cliente);
+            String token = jwtService.gerarToken(cliente);
+            return new TokenDTO(cliente.getEmail(), token);
+        } catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 

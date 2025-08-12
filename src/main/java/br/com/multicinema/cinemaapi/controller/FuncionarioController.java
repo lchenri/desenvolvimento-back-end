@@ -2,11 +2,14 @@ package br.com.multicinema.cinemaapi.controller;
 
 import br.com.multicinema.cinemaapi.controller.dto.FuncionarioDTO;
 import br.com.multicinema.cinemaapi.model.entity.Funcionario;
+import br.com.multicinema.cinemaapi.security.JwtService;
 import br.com.multicinema.cinemaapi.service.FuncionarioService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -17,9 +20,13 @@ import java.util.stream.Collectors;
 public class FuncionarioController {
 
     private final FuncionarioService funcionarioService;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public FuncionarioController(FuncionarioService funcionarioService) {
+    public FuncionarioController(FuncionarioService funcionarioService, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.funcionarioService = funcionarioService;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     @GetMapping()

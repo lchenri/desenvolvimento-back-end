@@ -12,7 +12,6 @@ import java.sql.Date;
 import java.util.List;
 
 @Entity
-
 public class Cliente extends Usuario{
 
     @NotBlank(message = "CPF não pode estar em branco")
@@ -57,4 +56,11 @@ public class Cliente extends Usuario{
         this.dataNascimento = dataNascimento;
     }
 
+    public boolean isFuncionario() {
+        return isFuncionario;
+    }
+
+    public void setFuncionario(boolean funcionario) {
+        isFuncionario = funcionario;
+    }
 }
