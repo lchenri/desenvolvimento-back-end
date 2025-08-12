@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class Funcionario extends Usuario{
 
     private boolean ativo;
-    private boolean isGerente;
+    private boolean isFuncionario = true;
 
     @ManyToOne
     private Unidade cinema;
@@ -23,12 +23,12 @@ public class Funcionario extends Usuario{
         this.ativo = ativo;
     }
 
-    public boolean isGerente() {
-        return isGerente;
+    public boolean isFuncionario() {
+        return isFuncionario;
     }
 
-    public void setGerente(boolean gerente) {
-        isGerente = gerente;
+    public void setFuncionario(boolean funcionario) {
+        isFuncionario = funcionario;
     }
 
     public Unidade getCinema() {

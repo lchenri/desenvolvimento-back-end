@@ -1,6 +1,11 @@
 package br.com.multicinema.cinemaapi.model.entity;
 
+import br.com.multicinema.cinemaapi.utils.validation.cpf.ValidaCPF;
+
 import javax.persistence.Entity;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 
 import java.sql.Date;
@@ -10,10 +15,15 @@ import java.util.List;
 
 public class Cliente extends Usuario{
 
+    @NotBlank(message = "CPF não pode estar em branco")
+    @ValidaCPF
     private String cpf;
+    @NotBlank(message = "Celular não pode estar em branco")
+    @Pattern(regexp = "\\d{2}9\\d{8}", message = "Celular deve estar no formato DD9XXXXXXXX")
     private String celular;
     private boolean pgtoSalvo;
     private Date dataNascimento;
+    private boolean isFuncionario = false;
 
     public String getCpf() {
         return cpf;
@@ -46,4 +56,5 @@ public class Cliente extends Usuario{
     public void setDataNascimento(Date dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
+
 }

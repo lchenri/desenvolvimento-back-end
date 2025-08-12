@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -81,5 +84,10 @@ public class ClienteController {
         ModelMapper modelMapper = new ModelMapper();
         Cliente cliente = modelMapper.map(dto, Cliente.class);
         return cliente;
+    }
+
+    private boolean validaCelular(String celular) {
+        // Verifica se o número segue o padrão dd9xxxxxxxx
+        return celular != null && celular.matches("\\d{2}9\\d{8}");
     }
 }

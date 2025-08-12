@@ -1,6 +1,7 @@
 package br.com.multicinema.cinemaapi.model.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ public class Cadeira {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
+    @NotEmpty
     private int numero;
     private boolean isDisponivel = true;
     private boolean isEspecial;

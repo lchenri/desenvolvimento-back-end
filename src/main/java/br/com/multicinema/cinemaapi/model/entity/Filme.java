@@ -1,6 +1,8 @@
 package br.com.multicinema.cinemaapi.model.entity;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -26,6 +28,7 @@ public class Filme {
     @OneToOne
     private IntervaloExibicao intervalo;
 
+    @JsonIgnore
     @ManyToMany
     private List<Genero> generos;
 

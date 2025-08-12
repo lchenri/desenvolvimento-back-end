@@ -4,6 +4,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.Email;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,12 +24,14 @@ public abstract class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Email
     private String email;
     private String senha;
     private String nome;
     private LocalDateTime criadoEm;
     private LocalDateTime ultimoAcesso;
     private boolean emailConfirmado;
+    private boolean isFuncionario;
 
     public Long getId() {
         return id;
