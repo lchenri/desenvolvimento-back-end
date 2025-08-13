@@ -1,23 +1,21 @@
 package br.com.multicinema.cinemaapi.model.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
 @Entity
-
 public class Genero {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String descricao;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "genero", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<FilmeGenero> filmeGeneros;
 
     public Long getId() {
         return id;
@@ -33,5 +31,13 @@ public class Genero {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public List<FilmeGenero> getFilmeGeneros() {
+        return filmeGeneros;
+    }
+
+    public void setFilmeGeneros(List<FilmeGenero> filmeGeneros) {
+        this.filmeGeneros = filmeGeneros;
     }
 }

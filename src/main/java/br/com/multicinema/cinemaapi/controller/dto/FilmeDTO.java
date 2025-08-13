@@ -1,10 +1,7 @@
 package br.com.multicinema.cinemaapi.controller.dto;
 
 import br.com.multicinema.cinemaapi.model.entity.Filme;
-import br.com.multicinema.cinemaapi.model.entity.Genero;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import br.com.multicinema.cinemaapi.model.entity.FilmeGenero;
 import org.modelmapper.ModelMapper;
 
 import java.time.LocalDateTime;
@@ -23,7 +20,7 @@ public class FilmeDTO {
     private LocalDateTime dataEstreia;
 
     private Long idIntervaloExibicao;
-    private List<Genero> idGeneros;
+    private List<FilmeGenero> idGeneros;
 
     public Long getId() {
         return id;
@@ -97,18 +94,18 @@ public class FilmeDTO {
         this.idIntervaloExibicao = idIntervaloExibicao;
     }
 
-    public List<Genero> getIdGeneros() {
+    public List<FilmeGenero> getIdGeneros() {
         return idGeneros;
     }
 
     public static FilmeDTO create(Filme filme){
         ModelMapper mapper = new ModelMapper();
         FilmeDTO filmeDTO = mapper.map(filme, FilmeDTO.class);
-        filmeDTO.setIdGeneros(filme.getGeneros());
+        filmeDTO.setIdGeneros(filme.getFilmeGeneros());
         return filmeDTO;
     }
 
-    public void setIdGeneros(List<Genero> idGeneros) {
+    public void setIdGeneros(List<FilmeGenero> idGeneros) {
         this.idGeneros = idGeneros;
     }
 }

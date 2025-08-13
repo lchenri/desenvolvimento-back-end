@@ -3,10 +3,6 @@ package br.com.multicinema.cinemaapi.model.entity;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,8 +25,8 @@ public class Filme {
     private IntervaloExibicao intervalo;
 
     @JsonIgnore
-    @ManyToMany
-    private List<Genero> generos;
+    @OneToMany(mappedBy = "filme", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<FilmeGenero> filmeGeneros;
 
     public Long getId() {
         return id;
@@ -104,13 +100,11 @@ public class Filme {
         this.intervalo = intervalo;
     }
 
-    public List<Genero> getGeneros() {
-        return generos;
+    public List<FilmeGenero> getFilmeGeneros() {
+        return filmeGeneros;
     }
 
-    public void setGeneros(List<Genero> generos) {
-        this.generos = generos;
+    public void setFilmeGeneros(List<FilmeGenero> filmeGeneros) {
+        this.filmeGeneros = filmeGeneros;
     }
 }
-
-
